@@ -1,0 +1,66 @@
+// Copyright 2022 Yunlong Feng
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#ifndef RM_BASE__ROBOT_BASE_NODE_HPP_
+#define RM_BASE__ROBOT_BASE_NODE_HPP_
+
+#include <thread>
+#include <memory>
+
+#include "rclcpp/rclcpp.hpp"
+
+#include "rmoss_base/transporter_interface.hpp"
+#include "rmoss_base/fixed_packet_tool.hpp"
+
+#include "rmoss_interfaces/msg/gimbal_cmd.hpp"
+#include "rmoss_interfaces/msg/chassis_cmd.hpp"
+#include "rmoss_interfaces/msg/game_status.hpp"
+#include "rmoss_interfaces/msg/robot_status.hpp"
+#include "rmoss_interfaces/msg/referee_cmd.hpp"
+
+namespace rm_base
+{
+
+class RobotBaseNode : rclcpp::Node
+{
+public:
+  explicit RobotBaseNode(
+    const rclcpp::NodeOptions & options = rclcpp::NodeOptions().use_intra_process_comms(true));
+
+  /**
+   * @brief 串口监听线程函数
+   *
+   */
+  void listen_loop();
+
+private:
+  void gimbal_cmd_cb(const rmoss_interfaces::msg::GimbalCmd::SharedPtr msg);
+  void chassis_cmd_cb(const rmoss_interfaces::msg::ChassisCmd::SharedPtr msg);
+
+private:
+  // 接收线程
+  std::unique_ptr<std::thread> listen_thread_;
+
+  // 通讯工具对象
+  rmoss_base::TransporterInterface::SharedPtr transporter_;
+  rmoss_base::FixedPacketTool<32>::SharedPtr packet_tool_;
+
+  // ros
+  rclcpp::Subscription<rmoss_interfaces::msg::GimbalCmd>::SharedPtr gimbal_cmd_sub_;
+  rclcpp::Subscription<rmoss_interfaces::msg::ChassisCmd>::SharedPtr chassis_cmd_sub_;
+};
+
+}  // namespace rm_base
+
+#endif  // RM_BASE__ROBOT_BASE_NODE_HPP_
