@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.11)
 project(rm_base)
 
 # Default to C++17
@@ -23,8 +23,32 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(rmoss_base REQUIRED)
 find_package(rmoss_interfaces REQUIRED)
+find_package(rm_interfaces REQUIRED)
+find_package(Boost REQUIRED)
+
+set(dependencies
+  rclcpp
+  rclcpp_components
+  rmoss_base
+  rmoss_interfaces
+  rm_interfaces
+)
 
 # ------------- Build library ------------ #
+
+file(GLOB_RECURSE buffer_processors CONFIGURE_DEPENDS "src/buffer_processor/*.cpp")
+
+add_library(${PROJECT_NAME}_node SHARED
+  "src/robot_base_node.cpp"
+  ${buffer_processors}
+)
+target_include_directories(${PROJECT_NAME}_node PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+ament_target_dependencies(${PROJECT_NAME}_node ${dependencies})
+
+rclcpp_components_register_nodes(${PROJECT_NAME}_node "rm_base::RobotBaseNode")
 
 # ------------ Build execuable ----------- #
 

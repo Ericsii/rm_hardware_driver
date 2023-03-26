@@ -39,7 +39,7 @@ public:
       rmoss_base::FixedPacket64>;
 
 public:
-  ProcessInterface(rclcpp::Node::SharedPtr node)
+  ProcessInterface(rclcpp::Node * node)
   : node_(node)
   {
   }
@@ -56,7 +56,7 @@ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ProcessInterface)
 
 protected:
-  rclcpp::Node::SharedPtr node_;
+  rclcpp::Node * node_;
 };
 
 class ProcessFactory
@@ -67,7 +67,7 @@ class ProcessFactory
    */
 
 public:
-  using CreateFunction = std::function<ProcessInterface::SharedPtr(rclcpp::Node::SharedPtr node)>;
+  using CreateFunction = std::function<ProcessInterface::SharedPtr(rclcpp::Node * node)>;
 
   /**
    * @brief 注册处理类的派生类构造函数
@@ -81,7 +81,7 @@ public:
   static bool register_class(const uint8_t & key)
   {
     if (auto it = get_creator_map().find(key); it == get_creator_map().end()) {
-      get_creator_map()[key] = [](rclcpp::Node::SharedPtr node) {return std::make_shared<T>(node);};
+      get_creator_map()[key] = [](rclcpp::Node * node) {return std::make_shared<T>(node);};
       return true;
     }
     return false;
@@ -95,7 +95,7 @@ public:
    * @return true
    * @return false
    */
-  static bool create(const uint8_t & key, rclcpp::Node::SharedPtr node)
+  static bool create(const uint8_t & key, rclcpp::Node * node)
   {
     auto processor = get_processor_map().find(key);
     auto creator = get_creator_map().find(key);

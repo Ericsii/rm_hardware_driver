@@ -14,22 +14,43 @@
 
 #include "rm_base/buffer_processor_factory.hpp"
 
+#include "rm_interfaces/msg/game_status.hpp"
+
 namespace rm_base
 {
 
 class GameStatusProcessor : public ProcessInterface
 {
 public:
-  explicit GameStatusProcessor(rclcpp::Node::SharedPtr node)
+  explicit GameStatusProcessor(rclcpp::Node * node)
   : ProcessInterface(node)
   {
+    auto topic_name = node_->declare_parameter("game_statue_topic", "game_status");
+    RCLCPP_INFO(node_->get_logger(), "game_statue_topic: %s", topic_name.c_str());
+    pub_ = node_->create_publisher<rm_interfaces::msg::GameStatus>(topic_name, 10);
   }
 
   bool process_packet(const Packet & packet)
   {
+    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
+      auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
+      rm_interfaces::msg::GameStatus::UniquePtr msg(new rm_interfaces::msg::GameStatus());
+      msg->header.frame_id = "base_link";
+      msg->header.stamp = node_->get_clock()->now();
+      packet_recv.unload_data(msg->game_type_progress, 2);
+      packet_recv.unload_data(msg->stage_remain_time, 3);
+      packet_recv.unload_data(msg->sync_time_stamp, 5);
+
+      pub_->publish(std::move(msg));
+      return true;
+    } else {
+      RCLCPP_WARN(node_->get_logger(), "Invalid length of data frame for GameStatus processor.");
+      return false;
+    }
   }
 
 private:
+  rclcpp::Publisher<rm_interfaces::msg::GameStatus>::SharedPtr pub_;
 };
 
 PROCESSOR_REGISTER(GameStatusProcessor, 0x01)

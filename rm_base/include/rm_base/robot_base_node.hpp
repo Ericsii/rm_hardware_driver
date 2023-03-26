@@ -32,7 +32,7 @@
 namespace rm_base
 {
 
-class RobotBaseNode : rclcpp::Node
+class RobotBaseNode : public rclcpp::Node
 {
 public:
   explicit RobotBaseNode(
@@ -48,13 +48,16 @@ private:
   void gimbal_cmd_cb(const rmoss_interfaces::msg::GimbalCmd::SharedPtr msg);
   void chassis_cmd_cb(const rmoss_interfaces::msg::ChassisCmd::SharedPtr msg);
 
+  bool checksum_send(rmoss_base::FixedPacket<64> & packet);
+  bool verify_checksum(const rmoss_base::FixedPacket<64> & packet);
+
 private:
   // 接收线程
   std::unique_ptr<std::thread> listen_thread_;
 
   // 通讯工具对象
   rmoss_base::TransporterInterface::SharedPtr transporter_;
-  rmoss_base::FixedPacketTool<32>::SharedPtr packet_tool_;
+  rmoss_base::FixedPacketTool<64>::SharedPtr packet_tool_;
 
   // ros
   rclcpp::Subscription<rmoss_interfaces::msg::GimbalCmd>::SharedPtr gimbal_cmd_sub_;
