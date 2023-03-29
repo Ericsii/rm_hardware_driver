@@ -20,7 +20,8 @@ enum class RecvID : uint8_t
   SHOOTDATA = 0x10,
   BULLETREMAINING = 0x11,
   REFREEINTERACT = 0x12,
-  ROBOTJOINTSTATE = 0x13
+  ROBOTJOINTSTATE = 0x13,
+  GIMBALIMU = 0x14
 };
 
 enum class SendID : uint8_t

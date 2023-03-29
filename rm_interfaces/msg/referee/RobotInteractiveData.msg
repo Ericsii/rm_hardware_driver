@@ -8,4 +8,4 @@ uint8 sender_id
 uint8 receiver_id
 
 # 由于串口通讯帧限制最大长度 64Byte 限制, data 段最大 49Byte
-uint8[] data
+uint8[54] data
