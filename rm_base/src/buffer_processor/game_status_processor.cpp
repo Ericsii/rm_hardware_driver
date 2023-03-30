@@ -38,6 +38,13 @@ public:
       msg->header.frame_id = "base_link";
       msg->header.stamp = node_->get_clock()->now();
 
+      ext_game_status_t data;
+      packet_recv.unload_data(data, 2);
+      msg->game_type = data.game_type;
+      msg->game_progress = data.game_progress;
+      msg->stage_remain_time = data.stage_remain_time;
+      msg->sync_time_stamp = data.SyncTimeStamp;
+
       pub_->publish(std::move(msg));
       return true;
     } else {
