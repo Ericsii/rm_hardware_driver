@@ -1,1 +1,4 @@
 find_package(ament_cmake_gtest REQUIRED)
+
+ament_add_gtest(test_processor_factory test_processor_factory.cpp)
+target_link_libraries(test_processor_factory ${PROJECT_NAME})
