@@ -5,8 +5,8 @@
 uint8 RMUC = 1 # RoboMaster 机甲大师赛
 uint8 RMUT = 2 # RoboMaster 机甲大师单项赛
 uint8 RMUA = 3 # ICRA RoboMaster 人工智能挑战赛
-uint8 RMUL_3v3 = 4 # RoboMaster 联盟赛 3V3
-uint8 RMUL_1v1 = 5 # RoboMaster 联盟赛 1V1
+uint8 RMUL3V3 = 4 # RoboMaster 联盟赛 3V3
+uint8 RMUL1V1 = 5 # RoboMaster 联盟赛 1V1
 # Game Progress
 uint8 GAME_UNSTARTED = 0 # 未开始比赛
 uint8 GAME_READY = 1 # 准备阶段
