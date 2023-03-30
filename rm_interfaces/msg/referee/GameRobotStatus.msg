@@ -34,4 +34,6 @@ uint16 chassis_power_limit # 机器人底盘功率限制上限
 # 0 bit: gimbal 口输出:  1 为有 24V 输出, 0 为无 24v 输出
 # 1 bit: chassis 口输出: 1 为有 24V 输出, 0 为无 24v 输出
 # 2 bit: shooter 口输出: 1 为有 24V 输出, 0 为无 24v 输出
-uint8 mains_power_gimbal_chassis_shooter_output
+bool gimbal_power_enable
+bool chassis_power_enables
+bool shooter_power_enable
