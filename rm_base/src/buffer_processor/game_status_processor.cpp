@@ -37,9 +37,6 @@ public:
       rm_interfaces::msg::GameStatus::UniquePtr msg(new rm_interfaces::msg::GameStatus());
       msg->header.frame_id = "base_link";
       msg->header.stamp = node_->get_clock()->now();
-      packet_recv.unload_data(msg->game_type_progress, 2);
-      packet_recv.unload_data(msg->stage_remain_time, 3);
-      packet_recv.unload_data(msg->sync_time_stamp, 5);
 
       pub_->publish(std::move(msg));
       return true;
@@ -50,6 +47,13 @@ public:
   }
 
 private:
+  typedef struct
+  {
+    uint8_t game_type : 4;
+    uint8_t game_progress : 4;
+    uint16_t stage_remain_time;
+    uint64_t SyncTimeStamp;
+  } ext_game_status_t;
   rclcpp::Publisher<rm_interfaces::msg::GameStatus>::SharedPtr pub_;
 };
 
