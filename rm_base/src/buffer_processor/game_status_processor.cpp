@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "rm_base/buffer_processor_factory.hpp"
+#include <rm_base/buffer_processor_factory.hpp>
 
-#include "rm_interfaces/msg/game_status.hpp"
+#include <rm_base/protocol_types.hpp>
+#include <rm_interfaces/msg/game_status.hpp>
 
 namespace rm_base
 {
@@ -39,7 +40,9 @@ public:
       msg->header.stamp = node_->get_clock()->now();
 
       ext_game_status_t data;
-      packet_recv.unload_data(data, 2);
+      if (!packet_recv.unload_data(data, 2)) {
+        return false;
+      }
       msg->game_type = data.game_type;
       msg->game_progress = data.game_progress;
       msg->stage_remain_time = data.stage_remain_time;
@@ -64,6 +67,8 @@ private:
   rclcpp::Publisher<rm_interfaces::msg::GameStatus>::SharedPtr pub_;
 };
 
-PROCESSOR_REGISTER(GameStatusProcessor, 0x01)
+#include <rm_base/register_macro.hpp>
+
+REGISTER_PROCESSOR_CLASS(GameStatusProcessor, static_cast<uint8_t>(RecvID::GAMESTATUS))
 
 }  // namespace rm_base

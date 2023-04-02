@@ -20,44 +20,10 @@
 #include <unordered_map>
 #include <variant>
 
-#include "rclcpp/rclcpp.hpp"
-
-#include "rmoss_base/fixed_packet_tool.hpp"
+#include <rm_base/processor_interface.hpp>
 
 namespace rm_base
 {
-
-class ProcessInterface
-{
-  /**
-   * @brief 消息处理基类
-   * 不同的消息帧重载 process_packet 来解析消息帧
-   */
-
-public:
-  using Packet = std::variant<rmoss_base::FixedPacket16, rmoss_base::FixedPacket32,
-      rmoss_base::FixedPacket64>;
-
-public:
-  ProcessInterface(rclcpp::Node * node)
-  : node_(node)
-  {
-  }
-
-  /**
-   * @brief 帧处理函数
-   * 解析 packet 帧
-   * @param packet 完整的帧，类型为 rmoss_base::FixedPacket16/rmoss_base::FixedPacket32/rmoss_base::FixedPacket64
-   * @return true 处理成功
-   * @return false 处理失败
-   */
-  virtual bool process_packet(const Packet & packet) = 0;
-
-  RCLCPP_SHARED_PTR_DEFINITIONS(ProcessInterface)
-
-protected:
-  rclcpp::Node * node_;
-};
 
 class ProcessFactory
 {
@@ -95,16 +61,7 @@ public:
    * @return true
    * @return false
    */
-  static bool create(const uint8_t & key, rclcpp::Node * node)
-  {
-    auto processor = get_processor_map().find(key);
-    auto creator = get_creator_map().find(key);
-    if (processor == get_processor_map().end() && creator != get_creator_map().end()) {
-      get_processor_map()[key] = creator->second(node);
-      return true;
-    }
-    return false;
-  }
+  static bool create(const uint8_t & key, rclcpp::Node * node);
 
   /**
    * @brief 解析具体消息帧
@@ -114,46 +71,27 @@ public:
    * @return true
    * @return false
    */
-  static bool process_packet(const uint8_t & key, const ProcessInterface::Packet & packet)
-  {
-    if (auto it = get_processor_map().find(key); it != get_processor_map().end()) {
-      return it->second->process_packet(packet);
-    }
-    return false;
-  }
+  static bool process_packet(const uint8_t & key, const ProcessInterface::Packet & packet);
+
+  /**
+   * @brief Get the processors object
+   *
+   * @return std::vector<ProcessInterface::SharedPtr>
+   */
+  static std::vector<ProcessInterface::SharedPtr> get_processors();
+
+  /**
+   * @brief Get the keys object
+   *
+   * @return std::vector<std::uint8_t>
+   */
+  static std::vector<std::uint8_t> get_creator_keys();
 
 private:
-  static std::unordered_map<uint8_t, CreateFunction> & get_creator_map()
-  {
-    static std::unordered_map<uint8_t, CreateFunction> creator_map;
-    return creator_map;
-  }
+  static std::unordered_map<uint8_t, CreateFunction> & get_creator_map();
 
-  static std::unordered_map<uint8_t, ProcessInterface::SharedPtr> & get_processor_map()
-  {
-    static std::unordered_map<uint8_t, ProcessInterface::SharedPtr> processor_map;
-    return processor_map;
-  }
+  static std::unordered_map<uint8_t, ProcessInterface::SharedPtr> & get_processor_map();
 };
-
-// 自动注册辅助模板类
-template<typename T>
-struct ProcessorRigisterHelper
-{
-};
-
-#define PROCESSOR_REGISTER(Class, Key) \
-  template<> \
-  struct ProcessorRigisterHelper<Class> \
-  { \
-    ProcessorRigisterHelper<Class>() \
-    { \
-      is_registed = ProcessFactory::register_class<Class>(Key); \
-    } \
-    bool is_registed; \
-  }; \
-  static ProcessorRigisterHelper<Class> register_plugin_ ## Class;
-
 }  // namespace rm_base
 
 #endif  // RM_BASE__BUFFER_PROCESSOR_FACTORY_HPP_

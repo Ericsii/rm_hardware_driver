@@ -39,6 +39,7 @@ file(GLOB_RECURSE buffer_processors CONFIGURE_DEPENDS "src/buffer_processor/*.cp
 
 add_library(${PROJECT_NAME} SHARED
   "src/robot_base_node.cpp"
+  "src/buffer_processor_factory.cpp"
   ${buffer_processors}
 )
 target_include_directories(${PROJECT_NAME} PUBLIC

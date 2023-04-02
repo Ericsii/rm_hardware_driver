@@ -146,13 +146,13 @@ typedef struct
  uint16_t red_outpost_HP;
  uint16_t red_base_HP;
  uint16_t blue_1_robot_HP;
- uint16_t blue _2_robot_HP;
+ uint16_t blue_2_robot_HP;
  uint16_t blue _3_robot_HP;
- uint16_t blue _4_robot_HP;
- uint16_t blue _5_robot_HP;
- uint16_t blue _7_robot_HP;
+ uint16_t blue_4_robot_HP;
+ uint16_t blue_5_robot_HP;
+ uint16_t blue_7_robot_HP;
  uint16_t blue_outpost_HP;
- uint16_t blue _base_HP;
+ uint16_t blue_base_HP;
 } ext_game_robot_HP_t;
 ```
 

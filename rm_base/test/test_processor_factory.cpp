@@ -18,10 +18,7 @@
 
 #include <rm_base/buffer_processor_factory.hpp>
 
-namespace rm_base
-{
-
-class TestProcessor : public ProcessInterface
+class TestProcessor : public rm_base::ProcessInterface
 {
 public:
   TestProcessor(rclcpp::Node * node)
@@ -36,14 +33,14 @@ public:
   }
 };
 
-PROCESSOR_REGISTER(TestProcessor, 0xff)
+#include <rm_base/register_macro.hpp>
 
-} // namespace rm_bae
+REGISTER_PROCESSOR_CLASS(TestProcessor, 0xff)
 
 
 TEST(TestProcessorFactory, register_class)
 {
-  EXPECT_TRUE(rm_base::register_plugin_TestProcessor.is_registed);
+  EXPECT_TRUE(TestProcessor_registered);
 }
 
 TEST(TestProcessorFactory, create_class)

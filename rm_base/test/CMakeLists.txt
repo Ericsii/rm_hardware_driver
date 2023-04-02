@@ -2,3 +2,9 @@ find_package(ament_cmake_gtest REQUIRED)
 
 ament_add_gtest(test_processor_factory test_processor_factory.cpp)
 target_link_libraries(test_processor_factory ${PROJECT_NAME})
+
+ament_add_gtest(test_game_status_processor test_game_status_processor.cpp)
+target_link_libraries(test_game_status_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_game_result_processor test_game_result_processor.cpp)
+target_link_libraries(test_game_result_processor ${PROJECT_NAME})
