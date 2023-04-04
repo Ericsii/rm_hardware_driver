@@ -1,6 +1,0 @@
-[0.000000] (-) TimerEvent: {}
-[0.000179] (rm_base) JobQueued: {'identifier': 'rm_base', 'dependencies': OrderedDict([('rm_interfaces', '/home/rmnuc/ros2_ws/src/rm_hardware_driver/install/rm_interfaces'), ('rm_base', '/home/rmnuc/ros2_ws/src/rm_hardware_driver/install/rm_base')])}
-[0.000209] (rm_base) JobStarted: {'identifier': 'rm_base'}
-[0.003627] (rm_base) StderrLine: {'line': b'Traceback (most recent call last):\n  File "/usr/lib/python3/dist-packages/colcon_core/executor/__init__.py", line 91, in __call__\n    rc = await self.task(*args, **kwargs)\n  File "/usr/lib/python3/dist-packages/colcon_core/task/__init__.py", line 93, in __call__\n    return await task_method(*args, **kwargs)\n  File "/usr/lib/python3/dist-packages/colcon_ros/task/ament_cmake/test.py", line 29, in test\n    return await extension.test()\n  File "/usr/lib/python3/dist-packages/colcon_cmake/task/cmake/test.py", line 45, in test\n    assert os.path.exists(args.build_base), \\\nAssertionError: Has this package been built before?\n'}
-[0.003862] (rm_base) JobEnded: {'identifier': 'rm_base', 'rc': 1}
-[0.014042] (-) EventReactorShutdown: {}
