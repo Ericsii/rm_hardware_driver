@@ -18,8 +18,8 @@
 #   109: 蓝方雷达站
 uint8 robot_id
 uint8 robot_level # 机器人等级: 1: 一级 2: 二级 3: 三级
-uint16 remain_HP # 机器人剩余血量
-uint16 max_HP # 机器人上限血量
+uint16 remain_hp # 机器人剩余血量
+uint16 max_hp # 机器人上限血量
 uint16 shooter_id1_17mm_cooling_rate # 机器人 1 号 17mm 枪口每秒冷却值
 uint16 shooter_id1_17mm_cooling_limit # 机器人 1 号 17mm 枪口每秒冷却值
 uint16 shooter_id1_17mm_speed_limit # 机器人 1 号 17mm 枪口上限速度 单位 m/s

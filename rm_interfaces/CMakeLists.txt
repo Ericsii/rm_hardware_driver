@@ -18,6 +18,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/referee/GameRobotPose.msg"
   "msg/referee/GameStatus.msg"
   "msg/referee/RobotInteractiveData.msg"
+  "msg/referee/GameRobotStatus.msg"
   "msg/ChassisCmd.msg"
   "msg/Gimbal.msg"
   "msg/GimbalCmd.msg"
