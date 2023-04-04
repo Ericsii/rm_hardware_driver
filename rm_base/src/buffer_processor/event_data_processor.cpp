@@ -60,16 +60,16 @@ public:
   }
 
 private:
+  typedef struct
+  {
+    uint32_t event_type;
+  } ext_event_data_t;
 
   bool get_event_data(ext_event_data_t data, int bit)
   {
     return (data.event_type >> bit) & 0x00000001;
   }
 
-  typedef struct
-  {
-    uint32_t event_type;
-  } ext_event_data_t;
   rclcpp::Publisher<rm_interfaces::msg::EventData>::SharedPtr pub_;
 };
 

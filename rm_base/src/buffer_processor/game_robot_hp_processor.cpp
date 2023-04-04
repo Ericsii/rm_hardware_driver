@@ -38,7 +38,7 @@ public:
       rm_interfaces::msg::GameRobotHp::UniquePtr msg(new rm_interfaces::msg::GameRobotHp());
       //msg->header.stamp = node_->now();
 
-      ext_game_robot_HP_t data;
+      ext_game_robot_hp_t data;
       packet_recv.unload_data(data, 2);
       msg->red_1_robot_hp = data.red_1_robot_HP;
       msg->red_2_robot_hp = data.red_2_robot_HP;
@@ -84,7 +84,7 @@ private:
     uint16_t blue_7_robot_HP;
     uint16_t blue_outpost_HP;
     uint16_t blue_base_HP;
-  } ext_game_robot_HP_t;
+  } ext_game_robot_hp_t;
   rclcpp::Publisher<rm_interfaces::msg::GameRobotHp>::SharedPtr pub_;
 };
 

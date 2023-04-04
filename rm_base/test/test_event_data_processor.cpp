@@ -31,7 +31,7 @@ typedef struct
 TEST(EventDataProcessor, test_event_data_processor)
 {
   ext_event_data_t event_data;
-  event_data.event_type = 0x000007FB;
+  event_data.event_type = 2043;
   rmoss_base::FixedPacket64 packet;
   packet.load_data(static_cast<uint8_t>(rm_base::RecvID::EVENTDATA), 1);
   packet.load_data(event_data, 2);
