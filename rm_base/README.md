@@ -60,16 +60,13 @@ packet.set_check_byte(Get_CRC8_Check_Sum(packet.buffer() + 1, 61, rm_base::CRC8_
 ```
 ## ROS2 topic list
 
-| topic name | msg_typy |
+| topic name | msg_type |
 | :-------------: | :-------------: | 
-|   /event_data   | rm_interfaces.EventData |
-|   /game_status  | rm_interfaces.GameStatus |
-|   /robot101_pose  | rm_interfaces.GameRobotPose |
-|   /robot101_status| rm_interfaces.GameRobotStatus|
-|   /robot102_pose  | rm_interfaces.GameRobotPose |
-|   /robot102_status| rm_interfaces.GameRobotPose |
-|   /robotxxx_pose  | ditto |
-|   /robotxxx_status| ditto |
-|   /robot_hp       | rm_interfaces.GameRobotHp |
-|   /robot_interactive_data | rm_interfaces.RobotInteractiveData |
+|   event_data   | rm_interfaces/EventData |
+|   game_status  | rm_interfaces/GameStatus |
+|   game_result  | rm_interfaces/GameResult |
+|   game_robot_pose  | rm_interfaces/GameRobotPose |
+|   game_robot_status| rm_interfaces/GameRobotStatus|
+|   game_robot_hp       | rm_interfaces/GameRobotHp |
+|   robot_interactive_data | rm_interfaces.RobotInteractiveData |
     
