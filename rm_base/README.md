@@ -60,6 +60,8 @@ packet.set_check_byte(Get_CRC8_Check_Sum(packet.buffer() + 1, 61, rm_base::CRC8_
 ```
 ## ROS2 topic list
 
+### 发布topic
+
 | topic name | msg_type |
 | :-------------: | :-------------: | 
 |   event_data   | rm_interfaces/EventData |
@@ -69,3 +71,11 @@ packet.set_check_byte(Get_CRC8_Check_Sum(packet.buffer() + 1, 61, rm_base::CRC8_
 |   game_robot_status| rm_interfaces/GameRobotStatus|
 |   game_robot_hp       | rm_interfaces/GameRobotHp |
 |   robot_interactive_data | rm_interfaces/RobotInteractiveData |
+
+### 订阅topic
+
+| topic name | msg_type |
+| :-------------: | :-------------: | 
+|   chassis_cmd   | rm_interfaces/ChassisCmd |
+|   gimbal_cmd    | rm_interfaces/GimbalCmd  |
+|   shoot_cmd     | rm_interfaces/ShootCmd   |
