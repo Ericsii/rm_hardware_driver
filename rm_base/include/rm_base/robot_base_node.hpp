@@ -23,11 +23,8 @@
 #include "rmoss_base/transporter_interface.hpp"
 #include "rmoss_base/fixed_packet_tool.hpp"
 
-#include "rmoss_interfaces/msg/gimbal_cmd.hpp"
-#include "rmoss_interfaces/msg/chassis_cmd.hpp"
-#include "rmoss_interfaces/msg/game_status.hpp"
-#include "rmoss_interfaces/msg/robot_status.hpp"
-#include "rmoss_interfaces/msg/referee_cmd.hpp"
+#include "rm_interfaces/msg/chassis_cmd.hpp"
+#include "rm_interfaces/msg/gimbal_cmd.hpp"
 
 namespace rm_base
 {
@@ -45,8 +42,8 @@ public:
   void listen_loop();
 
 private:
-  void gimbal_cmd_cb(const rmoss_interfaces::msg::GimbalCmd::SharedPtr msg);
-  void chassis_cmd_cb(const rmoss_interfaces::msg::ChassisCmd::SharedPtr msg);
+  void gimbal_cmd_cb(const rm_interfaces::msg::GimbalCmd::SharedPtr msg);
+  void chassis_cmd_cb(const rm_interfaces::msg::ChassisCmd::SharedPtr msg);
 
   bool checksum_send(rmoss_base::FixedPacket<64> & packet);
   bool verify_checksum(const rmoss_base::FixedPacket<64> & packet);
@@ -60,8 +57,8 @@ private:
   rmoss_base::FixedPacketTool<64>::SharedPtr packet_tool_;
 
   // ros
-  rclcpp::Subscription<rmoss_interfaces::msg::GimbalCmd>::SharedPtr gimbal_cmd_sub_;
-  rclcpp::Subscription<rmoss_interfaces::msg::ChassisCmd>::SharedPtr chassis_cmd_sub_;
+  rclcpp::Subscription<rm_interfaces::msg::GimbalCmd>::SharedPtr gimbal_cmd_sub_;
+  rclcpp::Subscription<rm_interfaces::msg::ChassisCmd>::SharedPtr chassis_cmd_sub_;
 };
 
 }  // namespace rm_base
