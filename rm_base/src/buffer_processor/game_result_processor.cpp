@@ -20,6 +20,11 @@
 namespace rm_base
 {
 
+typedef struct
+{
+  uint8_t winner;
+} __attribute__((__packed__)) ext_game_result_t;
+
 class GameResultProcessor : public ProcessInterface
 {
 public:
@@ -50,10 +55,6 @@ public:
   }
 
 private:
-  typedef struct
-  {
-    uint8_t winner;
-  } ext_game_result_t;
   rclcpp::Publisher<rm_interfaces::msg::GameResult>::SharedPtr pub_;
 };
 

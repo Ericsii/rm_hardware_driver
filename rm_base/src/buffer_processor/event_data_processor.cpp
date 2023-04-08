@@ -20,6 +20,11 @@
 namespace rm_base
 {
 
+typedef struct
+{
+  uint32_t event_type;
+} __attribute__((__packed__)) ext_event_data_t;
+
 class EventDataProcessor : public ProcessInterface
 {
 public:
@@ -60,11 +65,6 @@ public:
   }
 
 private:
-  typedef struct
-  {
-    uint32_t event_type;
-  } ext_event_data_t;
-
   bool get_event_data(ext_event_data_t data, int bit)
   {
     return (data.event_type >> bit) & 0x00000001;

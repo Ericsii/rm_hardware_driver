@@ -30,16 +30,34 @@ RobotBaseNode::RobotBaseNode(const rclcpp::NodeOptions & options)
   auto port_name = this->declare_parameter("port", "/dev/ttyUSB0");
   int baud_rate = this->declare_parameter("baud_rate", 115200);
   bool enable_realtime_send = this->declare_parameter("enable_realtime_send", false);
+  auto gimbal_cmd_topic_name = this->declare_parameter("gimbal_cmd_topic", "gimbal_cmd");
+  auto chassis_cmd_topic_name = this->declare_parameter("chassis_cmd_topic_name", "chassis_cmd");
   RCLCPP_INFO(this->get_logger(), "Serial port: %s baud_rate: %d", port_name.c_str(), baud_rate);
   RCLCPP_INFO(this->get_logger(), "enable async send: %d", enable_realtime_send);
 
   RCLCPP_INFO(this->get_logger(), "Initialize serial port.");
-  auto transporter = std::make_shared<rmoss_base::UartTransporter>(port_name, baud_rate);
+  auto transporter = std::make_shared<rmoss_base::UartTransporter>(port_name, baud_rate, 0, 8);
+  if (!transporter->open()) {
+    RCLCPP_ERROR(
+      this->get_logger(), "Failed to open serial port. Error: %s",
+      transporter->error_message().c_str());
+    return;
+  }
   packet_tool_ = std::make_shared<rmoss_base::FixedPacketTool<64>>(transporter);
   packet_tool_->enable_realtime_send(enable_realtime_send);
 
   RCLCPP_INFO(this->get_logger(), "Initialize data processors.");
   ProcessFactory::create(static_cast<uint8_t>(RecvID::GAMESTATUS), this);
+
+  RCLCPP_INFO(this->get_logger(), "Initialize subscriptions.");
+  gimbal_cmd_sub_ = this->create_subscription<rm_interfaces::msg::GimbalCmd>(
+    gimbal_cmd_topic_name, 10,
+    std::bind(&RobotBaseNode::gimbal_cmd_cb, this, std::placeholders::_1));
+  chassis_cmd_sub_ = this->create_subscription<rm_interfaces::msg::ChassisCmd>(
+    chassis_cmd_topic_name, 10,
+    std::bind(&RobotBaseNode::chassis_cmd_cb, this, std::placeholders::_1));
+  RCLCPP_INFO(this->get_logger(), "gimbal_cmd topic: %s", gimbal_cmd_sub_->get_topic_name());
+  RCLCPP_INFO(this->get_logger(), "chassis_cmd topic: %s", chassis_cmd_sub_->get_topic_name());
 
   // task thread
   listen_thread_ = std::make_unique<std::thread>(&RobotBaseNode::listen_loop, this);
@@ -79,14 +97,14 @@ bool RobotBaseNode::checksum_send(rmoss_base::FixedPacket<64> & packet)
 
 void RobotBaseNode::gimbal_cmd_cb(const rm_interfaces::msg::GimbalCmd::SharedPtr msg)
 {
-  // | 0x01 | tid 1byte | yaw_type 1byte | pitch_type 1byte | position.yaw 4byte | position.pitch 4byte | velocity.yaw 4byte | velocity.pitch 4byte |
-  // 4byte | velocity.pitch 4byte |
+  // | 0x01 | tid 1byte | yaw_type 1byte | pitch_type 1byte | position.yaw 4byte | position.pitch 4byte | velocity.yaw
+  // 4byte | velocity.pitch 4byte | 4byte | velocity.pitch 4byte |
   rmoss_base::FixedPacket<64> packet;
   packet.load_data(SendID::GIMBALCMD, 1);
   packet.load_data(msg->yaw_type, 2);
   packet.load_data(msg->pitch_type, 3);
   packet.load_data(msg->position.yaw, 4);
-  packet.load_data(msg->position.yaw, 8);
+  packet.load_data(msg->position.pitch, 8);
   packet.load_data(msg->velocity.yaw, 12);
   packet.load_data(msg->velocity.pitch, 16);
   if (!this->checksum_send(packet)) {

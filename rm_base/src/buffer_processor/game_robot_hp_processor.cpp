@@ -20,6 +20,26 @@
 namespace rm_base
 {
 
+typedef struct
+{
+  uint16_t red_1_robot_HP;
+  uint16_t red_2_robot_HP;
+  uint16_t red_3_robot_HP;
+  uint16_t red_4_robot_HP;
+  uint16_t red_5_robot_HP;
+  uint16_t red_7_robot_HP;
+  uint16_t red_outpost_HP;
+  uint16_t red_base_HP;
+  uint16_t blue_1_robot_HP;
+  uint16_t blue_2_robot_HP;
+  uint16_t blue_3_robot_HP;
+  uint16_t blue_4_robot_HP;
+  uint16_t blue_5_robot_HP;
+  uint16_t blue_7_robot_HP;
+  uint16_t blue_outpost_HP;
+  uint16_t blue_base_HP;
+} __attribute__((__packed__))  ext_game_robot_hp_t;
+
 class RobotHpProcessor : public ProcessInterface
 {
 public:
@@ -66,25 +86,6 @@ public:
   }
 
 private:
-  typedef struct
-  {
-    uint16_t red_1_robot_HP;
-    uint16_t red_2_robot_HP;
-    uint16_t red_3_robot_HP;
-    uint16_t red_4_robot_HP;
-    uint16_t red_5_robot_HP;
-    uint16_t red_7_robot_HP;
-    uint16_t red_outpost_HP;
-    uint16_t red_base_HP;
-    uint16_t blue_1_robot_HP;
-    uint16_t blue_2_robot_HP;
-    uint16_t blue_3_robot_HP;
-    uint16_t blue_4_robot_HP;
-    uint16_t blue_5_robot_HP;
-    uint16_t blue_7_robot_HP;
-    uint16_t blue_outpost_HP;
-    uint16_t blue_base_HP;
-  } ext_game_robot_hp_t;
   rclcpp::Publisher<rm_interfaces::msg::GameRobotHp>::SharedPtr pub_;
 };
 

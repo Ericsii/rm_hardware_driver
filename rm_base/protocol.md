@@ -6,9 +6,9 @@
 
 64字节数据包数据布局：
 
-| 数据头字节（0xff） | CMD_ID 数据标志位 |   数据字节    |  CRC8 校验字节   | 数据尾字节（0x0d） |
+| 数据头字节（0xff） | CMD_ID 数据标志位 |   数据字节    |  CRC8 校验字节(bit1 - bit61)   | 数据尾字节（0x0d） |
 | :-------------: | :-------------: | :-----------: | :---------: | :----------------: |
-|     0（1Byte）   |  2 (1Byte)      | 2-61 (60Byte) | 62（1Byte） |    63（1Byte）     |
+|     0（1Byte）   |  1 (1Byte)      | 2-61 (60Byte) | 62（1Byte） |    63（1Byte）     |
 
 PS： 对CMD_ID的定义在文件`include/rm_base/protocol_types.hpp`中
 
@@ -27,12 +27,18 @@ PS： 对CMD_ID的定义在文件`include/rm_base/protocol_types.hpp`中
 
 **若未加说明默认数据从\[数据字节段\]第一位开始至数据结束，末尾空余位以0x00补齐61字节**
 
+**注意每个结构体都需要以1字节对齐**
+
+1字节对齐方式
+- 在GCC中加入 __attribute__((__packed__))编译指令
+- 在STM32中加上 __packed 关键字
+
 若标有**步兵机器人必须**意味着此为自瞄程序所必须实现的通讯协议，其余未特殊说明为哨兵机器人所必须实现的协议。
 
 ### 底盘控制 (SendID::CHASSISCMD)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
   uint8_t type; // 1: 速度控制，(vx,vy,w)在底盘坐标下; 2: 底盘跟随云台(vx,vy)在云台坐标下; 3: 扭腰(vx,vy)在云台坐标下; 4: 陀螺 (vx,vy)在云台坐标下
   float linear_x; // 单位 m/s
@@ -48,7 +54,7 @@ typedef struct
 **步兵机器人必须**
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
   uint8_t yaw_type; // 1: 绝对角度控制，相对云台imu; 2: 相对角度控制; 3: 纯速度控制
   uint8_t pitch_type; // 同上
@@ -63,7 +69,7 @@ typedef struct
 **步兵机器人必须**
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
   uint8_t type; // 0:停止射击; 1: 一次射击; 2: 连续射击
   uint8_t projectile_num; // (可选参数) 射击子弹数目
@@ -73,7 +79,7 @@ typedef struct
 ### 裁判系统机器人间交互数据 (SendID::REFREEINTERACT)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
   uint16_t cmd_id;
   uint16_t send_id;
@@ -114,7 +120,7 @@ typedef struct
 参考：[裁判系统串口协议附录](https://rm-static.djicdn.com/tem/13194/RoboMaster_%E8%A3%81%E5%88%A4%E7%B3%BB%E7%BB%9F%E4%B8%B2%E5%8F%A3%E5%8D%8F%E8%AE%AE%E9%99%84%E5%BD%95%20V1.3.pdf)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint8_t game_type : 4;
  uint8_t game_progress : 4;
@@ -126,7 +132,7 @@ typedef struct
 ### 比赛结果 (RecvID::GAMERESULT)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint8_t winner;
 } ext_game_result_t;
@@ -135,7 +141,7 @@ typedef struct
 ### 机器人血量数据 (RecvID::ROBOTHP)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint16_t red_1_robot_HP;
  uint16_t red_2_robot_HP;
@@ -159,7 +165,7 @@ typedef struct
 ### 场地事件数据 (RecvID::EVENTDATA)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint32_t event_type;
 } ext_event_data_t;
@@ -168,7 +174,7 @@ typedef struct
 ### 比赛机器人状态 (RecvID::ROBOTSTATUS)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint8_t robot_id;
  uint8_t robot_level;
@@ -193,7 +199,7 @@ typedef struct
 ### 实时功率热量 (RecvID::POWERHEATDATA)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint16_t chassis_volt;
  uint16_t chassis_current;
@@ -208,7 +214,7 @@ typedef struct
 ### 机器人位置 (RecvID::GAMEROBOTPOS)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  float x;
  float y;
@@ -220,7 +226,7 @@ typedef struct
 ### 机器人增益 (RecvID::BUFFMUSK)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint8_t power_rune_buff;
 } ext_buff _t;
@@ -229,7 +235,7 @@ typedef struct
 ### 伤害状态 (RecvID::ROBOTHURT)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint8_t armor_id : 4;
  uint8_t hurt_type : 4;
@@ -240,7 +246,7 @@ typedef struct
 **步兵机器人必须**
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint8_t bullet_type;
  uint8_t shooter_id;
@@ -252,7 +258,7 @@ typedef struct
 ### 子弹剩余发射数 (RecvID::BULLETREMAINING)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
  uint16_t bullet_remaining_num_17mm;
  uint16_t bullet_remaining_num_42mm;
@@ -263,7 +269,7 @@ typedef struct
 ### 裁判系统机器人间交互数据 (RecvID::REFREEINTERACT)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
   uint16_t cmd_id;
   uint16_t send_id;
@@ -275,7 +281,7 @@ typedef struct
 ### 机器人关节状态 (RecvID::ROBOTJOINTSTATE)
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
   float yaw_position;
   float yaw_velocity;
@@ -296,7 +302,7 @@ typedef struct
 **步兵机器人必须**
 
 ```cpp
-typedef struct
+typedef struct __packed
 {
   // 姿态四元数
   float ori_x;
