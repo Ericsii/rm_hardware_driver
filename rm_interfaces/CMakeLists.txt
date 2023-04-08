@@ -20,6 +20,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/referee/GameStatus.msg"
   "msg/referee/PowerHeatData.msg"
   "msg/referee/RobotBuff.msg"
+  "msg/referee/RobotBulletRemain.msg"
   "msg/referee/RobotHurt.msg"
   "msg/referee/RobotInteractiveData.msg"
   "msg/referee/RobotShootData.msg"
