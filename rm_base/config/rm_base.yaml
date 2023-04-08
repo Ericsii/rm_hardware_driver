@@ -1,0 +1,5 @@
+/**:
+  ros__parameters:
+    port: "/dev/ttyUSB0"
+    baud_rate: 115200
+    enable_realtime_send: false

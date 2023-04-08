@@ -48,11 +48,31 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
-rclcpp_components_register_nodes(${PROJECT_NAME} "rm_base::RobotBaseNode")
+rclcpp_components_register_node(${PROJECT_NAME}
+  PLUGIN "rm_base::RobotBaseNode"
+  EXECUTABLE robot_base_node
+)
 
 # ------------ Build execuable ----------- #
 
 # ---------------- Install --------------- #
+
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+install(TARGETS ${PROJECT_NAME}
+  EXPORT export_${PROJECT_NAME}
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+)
+
+# Install  directories
+install(DIRECTORY launch config
+  DESTINATION share/${PROJECT_NAME}
+)
 
 # ----------------- Test ----------------- #
 if(BUILD_TESTING)
