@@ -8,3 +8,6 @@ target_link_libraries(test_game_status_processor ${PROJECT_NAME})
 
 ament_add_gtest(test_game_result_processor test_game_result_processor.cpp)
 target_link_libraries(test_game_result_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_event_data_pocessor test_event_data_processor.cpp)
+target_link_libraries(test_event_data_pocessor ${PROJECT_NAME})
