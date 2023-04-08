@@ -17,7 +17,8 @@ typedef struct
 class RobotShootDataProcessor : public ProcessInterface
 {
 public:
-  explicit RobotShootDataProcessor(rclcpp::Node* node) : ProcessInterface(node)
+  explicit RobotShootDataProcessor(rclcpp::Node * node)
+  : ProcessInterface(node)
   {
     auto topic_name = node_->declare_parameter("robot_shoot_data_topic", "robot_shoot_data");
     RCLCPP_INFO(node_->get_logger(), "robot_shoot_data topic: %s", topic_name.c_str());
@@ -42,7 +43,9 @@ public:
       pub_->publish(std::move(msg));
       return true;
     } else {
-      RCLCPP_WARN(node_->get_logger(), "Invalid length of data frame for RobotShootData processor.");
+      RCLCPP_WARN(
+        node_->get_logger(),
+        "Invalid length of data frame for RobotShootData processor.");
       return false;
     }
   }
