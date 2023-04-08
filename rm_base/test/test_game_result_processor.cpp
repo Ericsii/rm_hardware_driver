@@ -26,7 +26,7 @@
 typedef struct
 {
   uint8_t winner;
-} ext_game_result_t;
+} __attribute__((__packed__)) ext_game_result_t;
 
 TEST(GameResultProcessor, test_game_result_processor)
 {

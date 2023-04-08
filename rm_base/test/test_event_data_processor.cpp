@@ -26,7 +26,7 @@
 typedef struct
 {
   uint32_t event_type;
-} ext_event_data_t;
+} __attribute__((__packed__)) ext_event_data_t;
 
 TEST(EventDataProcessor, test_event_data_processor)
 {

@@ -29,7 +29,7 @@ typedef struct
   uint8_t game_progress : 4;
   uint16_t stage_remain_time;
   uint64_t SyncTimeStamp;
-} ext_game_status_t;
+} __attribute__((__packed__)) ext_game_status_t;
 
 TEST(GameStatusProcessor, test_game_status_processor)
 {

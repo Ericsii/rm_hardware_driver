@@ -41,7 +41,7 @@ typedef struct
   uint16_t blue_7_robot_HP;
   uint16_t blue_outpost_HP;
   uint16_t blue_base_HP;
-} ext_game_robot_hp_t;
+} __attribute__((__packed__)) ext_game_robot_hp_t;
 
 TEST(RobotHpProcessor, test_game_robot_hp_processor)
 {

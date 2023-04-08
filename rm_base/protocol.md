@@ -117,7 +117,7 @@ typedef struct __packed
 
 #### 比赛状态 (RecvID::GAMESTATUS)
 
-参考：[裁判系统串口协议附录](https://rm-static.djicdn.com/tem/13194/RoboMaster_%E8%A3%81%E5%88%A4%E7%B3%BB%E7%BB%9F%E4%B8%B2%E5%8F%A3%E5%8D%8F%E8%AE%AE%E9%99%84%E5%BD%95%20V1.3.pdf)
+参考：[裁判系统串口协议附录](https://rm-static.djicdn.com/tem/17348/RoboMaster%20%E8%A3%81%E5%88%A4%E7%B3%BB%E7%BB%9F%E4%B8%B2%E5%8F%A3%E5%8D%8F%E8%AE%AE%E9%99%84%E5%BD%95%20V1.4%EF%BC%8820220805%EF%BC%89.pdf)
 
 ```cpp
 typedef struct __packed

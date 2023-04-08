@@ -34,8 +34,8 @@ public:
   explicit GameStatusProcessor(rclcpp::Node * node)
   : ProcessInterface(node)
   {
-    auto topic_name = node_->declare_parameter("game_statue_topic", "game_status");
-    RCLCPP_INFO(node_->get_logger(), "game_statue_topic: %s", topic_name.c_str());
+    auto topic_name = node_->declare_parameter("game_status_topic", "game_status");
+    RCLCPP_INFO(node_->get_logger(), "game_status_topic: %s", topic_name.c_str());
     pub_ = node_->create_publisher<rm_interfaces::msg::GameStatus>(topic_name, 10);
   }
 
