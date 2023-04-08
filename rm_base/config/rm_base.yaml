@@ -4,5 +4,5 @@
     baud_rate: 115200
     enable_realtime_send: false
 
-    gimbal_cmd_topic: "gimbal_cmds"
+    gimbal_cmd_topic: "gimbal_cmd"
     chassis_cmd_topic_name: "chassis_cmd"
