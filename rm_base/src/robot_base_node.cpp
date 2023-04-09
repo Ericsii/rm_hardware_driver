@@ -48,6 +48,9 @@ RobotBaseNode::RobotBaseNode(const rclcpp::NodeOptions & options)
 
   RCLCPP_INFO(this->get_logger(), "Initialize data processors.");
   ProcessFactory::create(static_cast<uint8_t>(RecvID::GAMESTATUS), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::GAMERESULT), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::ROBOTHP), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::EVENTDATA), this);
   ProcessFactory::create(static_cast<uint8_t>(RecvID::SHOOTDATA), this);
 
   RCLCPP_INFO(this->get_logger(), "Initialize subscriptions.");
