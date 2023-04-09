@@ -17,7 +17,7 @@ typedef struct
   float bullet_speed;
 } __attribute__((__packed__)) ext_shoot_data_t;
 
-TEST(EventDataProcessor, test_event_data_processor)
+TEST(RobotShootDataProcessor, test_shoot_data_processor)
 {
   ext_shoot_data_t shoot_data;
   shoot_data.bullet_type = 1;
@@ -37,6 +37,6 @@ TEST(EventDataProcessor, test_event_data_processor)
   EXPECT_TRUE(
     rm_base::ProcessFactory::process_packet(
       static_cast<uint8_t>(rm_base::RecvID::
-      EVENTDATA), packet));
+      SHOOTDATA), packet));
   rclcpp::shutdown();
 }
