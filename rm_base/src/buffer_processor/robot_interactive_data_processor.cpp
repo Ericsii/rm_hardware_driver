@@ -25,7 +25,7 @@ typedef struct __packed
   uint16_t cmd_id;
   uint16_t send_id;
   uint16_t recv_id;
-  uint16_t data[54];  // 64字节帧限制最大数据量 54 字节
+  uint8_t data[54];  // 64字节帧限制最大数据量 54 字节
 } __attribute__((__packed__)) referee_interact_t;
 
 class RobotInteractiveDataProcessor : public ProcessInterface
@@ -51,7 +51,6 @@ public:
       referee_interact_t referee_interact;
 
       if (!packet_recv.unload_data(referee_interact, 2)) {
-printf("anonononono");
         return false;
       }
       msg->data_id = referee_interact.cmd_id;
@@ -61,7 +60,6 @@ printf("anonononono");
         msg->data[i] = referee_interact.data[i];
       }
 
-printf("aaaa");
       pub_->publish(std::move(msg));
       return true;
     } else {

@@ -84,7 +84,7 @@ typedef struct __packed
   uint16_t cmd_id;
   uint16_t send_id;
   uint16_t recv_id;
-  uint16_t data[54]; // 64字节帧限制最大数据量 54 字节
+  uint8_t data[54]; // 64字节帧限制最大数据量 54 字节
 } send_referee_interact_t;
 ```
 
@@ -274,7 +274,7 @@ typedef struct __packed
   uint16_t cmd_id;
   uint16_t send_id;
   uint16_t recv_id;
-  uint16_t data[54]; // 64字节帧限制最大数据量 54 字节
+  uint8_t data[54]; // 64字节帧限制最大数据量 54 字节
 } referee_interact_t;
 ```
 
