@@ -34,22 +34,25 @@ typedef struct __packed
 class PowerHeatDataProcessor : public ProcessInterface
 {
 public:
-  explicit PowerHeatDataProcessor(rclcpp::Node * node)
-  : ProcessInterface(node)
+  explicit PowerHeatDataProcessor(rclcpp::Node* node) : ProcessInterface(node)
   {
     auto topic_name = node_->declare_parameter("power_heat_data_topic", "power_heat_data");
     RCLCPP_INFO(node_->get_logger(), "power_heat_data_topic: %s", topic_name.c_str());
     pub_ = node_->create_publisher<rm_interfaces::msg::PowerHeatData>(topic_name, 10);
   }
 
-  bool process_packet(const Packet & packet)
+  bool process_packet(const Packet& packet)
   {
-    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
+    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet))
+    {
       auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
       rm_interfaces::msg::PowerHeatData::UniquePtr msg(new rm_interfaces::msg::PowerHeatData());
 
       ext_power_heat_data_t data;
-      packet_recv.unload_data(data, 2);
+      if (!packet_recv.unload_data(data, 2))
+      {
+        return false;
+      }
       msg->chassis_volt = data.chassis_volt;
       msg->chassis_current = data.chassis_current;
       msg->chassis_power = data.chassis_power;
@@ -60,7 +63,9 @@ public:
 
       pub_->publish(std::move(msg));
       return true;
-    } else {
+    }
+    else
+    {
       RCLCPP_WARN(node_->get_logger(), "Invalid length of data frame for PowerHeatData processor.");
       return false;
     }

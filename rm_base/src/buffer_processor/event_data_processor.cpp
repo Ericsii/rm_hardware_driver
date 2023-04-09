@@ -28,25 +28,28 @@ typedef struct
 class EventDataProcessor : public ProcessInterface
 {
 public:
-  explicit EventDataProcessor(rclcpp::Node * node)
-  : ProcessInterface(node)
+  explicit EventDataProcessor(rclcpp::Node* node) : ProcessInterface(node)
   {
     auto topic_name = node_->declare_parameter("event_data_topic", "event_data");
     RCLCPP_INFO(node_->get_logger(), "event_data_topic: %s", topic_name.c_str());
     pub_ = node_->create_publisher<rm_interfaces::msg::EventData>(topic_name, 10);
   }
 
-  bool process_packet(const Packet & packet)
+  bool process_packet(const Packet& packet)
   {
-    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
+    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet))
+    {
       auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
       rm_interfaces::msg::EventData::UniquePtr msg(new rm_interfaces::msg::EventData());
 
       ext_event_data_t data;
-      packet_recv.unload_data(data, 2);
+      if (!packet_recv.unload_data(data, 2))
+      {
+        return false;
+      }
       msg->supply_1_occupation = get_event_data(data, 0);
       msg->supply_2_occupation = get_event_data(data, 1);
-      //msg->supply_3_occupation = get_event_data(data, 2);
+      // msg->supply_3_occupation = get_event_data(data, 2);
       msg->rune_hit_occupation = get_event_data(data, 3);
       msg->rune_small_enable = get_event_data(data, 4);
       msg->rune_big_enable = get_event_data(data, 5);
@@ -58,7 +61,9 @@ public:
 
       pub_->publish(std::move(msg));
       return true;
-    } else {
+    }
+    else
+    {
       RCLCPP_WARN(node_->get_logger(), "Invalid length of data frame for EventData processor.");
       return false;
     }
