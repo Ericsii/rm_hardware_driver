@@ -20,3 +20,6 @@ target_link_libraries(test_game_robot_pos_processor ${PROJECT_NAME})
 
 ament_add_gtest(test_robot_buff_processor test_robot_buff_processor.cpp)
 target_link_libraries(test_robot_buff_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_robot_hurt_processor test_robot_hurt_processor.cpp)
+target_link_libraries(test_robot_hurt_processor ${PROJECT_NAME})
