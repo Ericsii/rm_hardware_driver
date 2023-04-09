@@ -15,7 +15,7 @@
 #include <rm_base/buffer_processor_factory.hpp>
 
 #include <rm_base/protocol_types.hpp>
-#include <rm_interfaces/msg/game_status.hpp>
+#include "rm_interfaces/msg/game_status.hpp"
 
 namespace rm_base
 {

@@ -21,8 +21,6 @@
 #include <rm_base/buffer_processor_factory.hpp>
 #include <rm_base/protocol_types.hpp>
 
-#include <iostream>
-
 typedef struct
 {
   uint16_t red_1_robot_HP;
@@ -64,7 +62,7 @@ TEST(RobotHpProcessor, test_game_robot_hp_processor)
   robot_hp.blue_base_HP = 100;
   rmoss_base::FixedPacket64 packet;
   packet.load_data(static_cast<uint8_t>(rm_base::RecvID::ROBOTHP), 1);
-  packet.load_data(game_robot_hp, 2);
+  packet.load_data(robot_hp, 2);
   packet.set_check_byte(rm_base::Get_CRC8_Check_Sum(packet.buffer() + 1, 61, rm_base::CRC8_INIT));
 
   rclcpp::init(0, nullptr);

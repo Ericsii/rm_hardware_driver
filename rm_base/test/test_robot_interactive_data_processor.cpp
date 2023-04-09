@@ -21,8 +21,6 @@
 #include <rm_base/buffer_processor_factory.hpp>
 #include <rm_base/protocol_types.hpp>
 
-#include <iostream>
-
 typedef struct __packed
 {
   uint16_t cmd_id;

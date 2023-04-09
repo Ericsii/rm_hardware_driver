@@ -32,3 +32,6 @@ target_link_libraries(test_robot_bullet_remain_processor ${PROJECT_NAME})
 
 ament_add_gtest(test_robot_interactive_data_processor test_robot_interactive_data_processor.cpp)
 target_link_libraries(test_robot_interactive_data_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_game_robot_hp_processor test_game_robot_hp_processor.cpp)
+target_link_libraries(test_game_robot_hp_processor ${PROJECT_NAME})

@@ -21,8 +21,6 @@
 #include <rm_base/buffer_processor_factory.hpp>
 #include <rm_base/protocol_types.hpp>
 
-#include <iostream>
-
 typedef struct
 {
   uint8_t game_type : 4;
