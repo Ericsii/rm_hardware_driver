@@ -31,25 +31,24 @@ typedef struct __packed
 class GameRobotPosProcessor : public ProcessInterface
 {
 public:
-  explicit GameRobotPosProcessor(rclcpp::Node* node) : ProcessInterface(node)
+  explicit GameRobotPosProcessor(rclcpp::Node * node)
+  : ProcessInterface(node)
   {
     auto topic_name = node_->declare_parameter("game_robot_pos_topic", "game_robot_pos");
     RCLCPP_INFO(node_->get_logger(), "game_robot_pos_topic: %s", topic_name.c_str());
     pub_ = node_->create_publisher<rm_interfaces::msg::GameRobotPos>(topic_name, 10);
   }
 
-  bool process_packet(const Packet& packet)
+  bool process_packet(const Packet & packet)
   {
-    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet))
-    {
+    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
       auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
       rm_interfaces::msg::GameRobotPos::UniquePtr msg(new rm_interfaces::msg::GameRobotPos());
       msg->header.frame_id = "base_link";
       msg->header.stamp = node_->get_clock()->now();
 
       ext_game_robot_pos_t data;
-      if (!packet_recv.unload_data(data, 2))
-      {
+      if (!packet_recv.unload_data(data, 2)) {
         return false;
       }
       msg->x = data.x;
@@ -59,9 +58,7 @@ public:
 
       pub_->publish(std::move(msg));
       return true;
-    }
-    else
-    {
+    } else {
       RCLCPP_WARN(node_->get_logger(), "Invalid length of data frame for GameRobotPos processor.");
       return false;
     }

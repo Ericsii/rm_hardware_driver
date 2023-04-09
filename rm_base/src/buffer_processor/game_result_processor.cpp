@@ -28,32 +28,29 @@ typedef struct
 class GameResultProcessor : public ProcessInterface
 {
 public:
-  explicit GameResultProcessor(rclcpp::Node* node) : ProcessInterface(node)
+  explicit GameResultProcessor(rclcpp::Node * node)
+  : ProcessInterface(node)
   {
     auto topic_name = node_->declare_parameter("game_result_topic", "game_result");
     RCLCPP_INFO(node_->get_logger(), "game_result_topic: %s", topic_name.c_str());
     pub_ = node_->create_publisher<rm_interfaces::msg::GameResult>(topic_name, 10);
   }
 
-  bool process_packet(const Packet& packet)
+  bool process_packet(const Packet & packet)
   {
-    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet))
-    {
+    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
       auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
       rm_interfaces::msg::GameResult::UniquePtr msg(new rm_interfaces::msg::GameResult());
 
       ext_game_result_t data;
-      if (!packet_recv.unload_data(data, 2))
-      {
+      if (!packet_recv.unload_data(data, 2)) {
         return false;
       }
       msg->result = data.winner;
 
       pub_->publish(std::move(msg));
       return true;
-    }
-    else
-    {
+    } else {
       RCLCPP_WARN(node_->get_logger(), "Invalid length of data frame for GameResult processor.");
       return false;
     }

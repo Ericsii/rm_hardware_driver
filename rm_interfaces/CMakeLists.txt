@@ -15,7 +15,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/referee/EventData.msg"
   "msg/referee/GameResult.msg"
   "msg/referee/GameRobotHp.msg"
-  "msg/referee/GameRobotPose.msg"
+  "msg/referee/GameRobotPos.msg"
   "msg/referee/GameRobotStatus.msg"
   "msg/referee/GameStatus.msg"
   "msg/referee/PowerHeatData.msg"

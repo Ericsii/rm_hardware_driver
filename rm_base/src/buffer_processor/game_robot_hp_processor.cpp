@@ -43,24 +43,23 @@ typedef struct
 class RobotHpProcessor : public ProcessInterface
 {
 public:
-  explicit RobotHpProcessor(rclcpp::Node* node) : ProcessInterface(node)
+  explicit RobotHpProcessor(rclcpp::Node * node)
+  : ProcessInterface(node)
   {
     auto topic_name = node_->declare_parameter("robot_hp_topic", "robot_hp");
     RCLCPP_INFO(node_->get_logger(), "robot_hp_topic: %s", topic_name.c_str());
     pub_ = node_->create_publisher<rm_interfaces::msg::GameRobotHp>(topic_name, 10);
   }
 
-  bool process_packet(const Packet& packet)
+  bool process_packet(const Packet & packet)
   {
-    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet))
-    {
+    if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
       auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
       rm_interfaces::msg::GameRobotHp::UniquePtr msg(new rm_interfaces::msg::GameRobotHp());
       // msg->header.stamp = node_->now();
 
       ext_game_robot_hp_t data;
-      if (!packet_recv.unload_data(data, 2))
-      {
+      if (!packet_recv.unload_data(data, 2)) {
         return false;
       }
       msg->red_1_robot_hp = data.red_1_robot_HP;
@@ -82,9 +81,7 @@ public:
 
       pub_->publish(std::move(msg));
       return true;
-    }
-    else
-    {
+    } else {
       RCLCPP_WARN(node_->get_logger(), "Invalid length of data frame for GameRobotHp processor.");
       return false;
     }
