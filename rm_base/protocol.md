@@ -229,7 +229,7 @@ typedef struct __packed
 typedef struct __packed
 {
  uint8_t power_rune_buff;
-} ext_buff _t;
+} ext_buff_t;
 ```
 
 ### 伤害状态 (RecvID::ROBOTHURT)
