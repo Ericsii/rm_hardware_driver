@@ -266,7 +266,7 @@ typedef struct __packed
 } ext_bullet_remaining_t;
 ```
 
-### 裁判系统机器人间交互数据 (RecvID::REFREEINTERACT)
+### 裁判系统机器人间交互数据 (RecvID::REFEREEINTERACT)
 
 ```cpp
 typedef struct __packed

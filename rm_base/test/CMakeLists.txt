@@ -27,5 +27,8 @@ target_link_libraries(test_robot_hurt_processor ${PROJECT_NAME})
 ament_add_gtest(test_robot_shoot_data_processor test_robot_shoot_data_processor.cpp)
 target_link_libraries(test_robot_shoot_data_processor ${PROJECT_NAME})
 
-ament_add_gtest(test_robot_bullet_remaining_processor test_robot_bullet_remaining_processor.cpp)
-target_link_libraries(test_robot_bullet_remaining_processor ${PROJECT_NAME})
+ament_add_gtest(test_robot_bullet_remain_processor test_robot_bullet_remain_processor.cpp)
+target_link_libraries(test_robot_bullet_remain_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_robot_interactive_data_processor test_robot_interactive_data_processor.cpp)
+target_link_libraries(test_robot_interactive_data_processor ${PROJECT_NAME})
