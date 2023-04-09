@@ -58,7 +58,7 @@ def generate_launch_description():
         condition=UnlessCondition(use_eternal_container),
     )
 
-    # Create armor detector node
+    # Create robot base node
     load_rm_base = LoadComposableNodes(
         target_container=container_name,
         composable_node_descriptions=[
