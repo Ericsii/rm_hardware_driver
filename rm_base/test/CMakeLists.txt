@@ -14,3 +14,6 @@ target_link_libraries(test_event_data_pocessor ${PROJECT_NAME})
 
 ament_add_gtest(test_power_heat_data_processor test_power_heat_data_processor.cpp)
 target_link_libraries(test_power_heat_data_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_game_robot_pos_processor test_game_robot_pos_processor.cpp)
+target_link_libraries(test_game_robot_pos_processor ${PROJECT_NAME})
