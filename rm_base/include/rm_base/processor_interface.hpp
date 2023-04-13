@@ -33,7 +33,7 @@ public:
       rmoss_base::FixedPacket64>;
 
 public:
-  ProcessInterface(rclcpp::Node * node)
+  explicit ProcessInterface(rclcpp::Node * node)
   : node_(node)
   {
   }

@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,29 +25,29 @@ namespace rm_base
 
 typedef struct
 {
-  uint8_t type; // 1: 速度控制，(vx,vy,w)在底盘坐标下; 2: 底盘跟随云台(vx,vy)在云台坐标下; 3: 扭腰(vx,vy)在云台坐标下; 4: 陀螺 (vx,vy)在云台坐标下
-  float linear_x; // 单位 m/s
+  uint8_t type;
+  float linear_x;
   float linear_y;
   float linear_z;
-  float angular_x; // 单位 rad/s
+  float angular_x;
   float angular_y;
   float angular_z;
 } __attribute__((__packed__)) chassis_cmd_t;
 
 typedef struct
 {
-  uint8_t yaw_type; // 1: 绝对角度控制，相对云台imu; 2: 相对角度控制; 3: 纯速度控制
-  uint8_t pitch_type; // 同上
-  float position_yaw; // 单位 rad
+  uint8_t yaw_type;
+  uint8_t pitch_type;
+  float position_yaw;
   float position_pitch;
-  float velocity_yaw; // 单位 rad/s
+  float velocity_yaw;
   float velocity_pitch;
 } __attribute__((__packed__)) gimbal_cmd_t;
 
 typedef struct
 {
-  uint8_t type; // 0:停止射击; 1: 一次射击; 2: 连续射击
-  uint8_t projectile_num; // (可选参数) 射击子弹数目
+  uint8_t type;
+  uint8_t projectile_num;
 } __attribute__((__packed__)) shoot_cmd_t;
 
 typedef struct
@@ -55,7 +55,7 @@ typedef struct
   uint16_t cmd_id;
   uint16_t send_id;
   uint16_t recv_id;
-  uint8_t data[54]; // 64字节帧限制最大数据量 54 字节
+  uint8_t data[54];
 } __attribute__((__packed__)) send_referee_interact_t;
 
 RobotBaseNode::RobotBaseNode(const rclcpp::NodeOptions & options)
@@ -145,8 +145,6 @@ bool RobotBaseNode::checksum_send(rmoss_base::FixedPacket<64> & packet)
 
 void RobotBaseNode::chassis_cmd_cb(const rm_interfaces::msg::ChassisCmd::SharedPtr msg)
 {
-  // | 0x02 | tid 1byte | type 1byte | twist.linear.x 4byte | twist.linear.y 4byte | accel.linear.x 4byte |
-  // accel.linear.y 4byte | accel.anglular 4byte |
   rmoss_base::FixedPacket<64> packet;
   chassis_cmd_t data;
   data.type = msg->type;
@@ -165,8 +163,6 @@ void RobotBaseNode::chassis_cmd_cb(const rm_interfaces::msg::ChassisCmd::SharedP
 
 void RobotBaseNode::gimbal_cmd_cb(const rm_interfaces::msg::GimbalCmd::SharedPtr msg)
 {
-  // | 0x01 | tid 1byte | yaw_type 1byte | pitch_type 1byte | position.yaw 4byte | position.pitch 4byte | velocity.yaw
-  // 4byte | velocity.pitch 4byte | 4byte | velocity.pitch 4byte |
   rmoss_base::FixedPacket<64> packet;
   gimbal_cmd_t data;
   data.yaw_type = msg->yaw_type;

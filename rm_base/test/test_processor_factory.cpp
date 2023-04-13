@@ -21,7 +21,7 @@
 class TestProcessor : public rm_base::ProcessInterface
 {
 public:
-  TestProcessor(rclcpp::Node * node)
+  explicit TestProcessor(rclcpp::Node * node)
   : ProcessInterface(node)
   {
   }
