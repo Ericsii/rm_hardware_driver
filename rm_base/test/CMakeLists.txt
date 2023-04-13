@@ -35,3 +35,9 @@ target_link_libraries(test_robot_interactive_data_processor ${PROJECT_NAME})
 
 ament_add_gtest(test_game_robot_hp_processor test_game_robot_hp_processor.cpp)
 target_link_libraries(test_game_robot_hp_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_gimbal_imu_processor test_gimbal_imu_processor.cpp)
+target_link_libraries(test_gimbal_imu_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_joint_state_processor test_joint_state_processor.cpp)
+target_link_libraries(test_joint_state_processor ${PROJECT_NAME})

@@ -25,6 +25,8 @@
 
 #include "rm_interfaces/msg/chassis_cmd.hpp"
 #include "rm_interfaces/msg/gimbal_cmd.hpp"
+#include "rm_interfaces/msg/shoot_cmd.hpp"
+#include "rm_interfaces/msg/robot_interactive_data.hpp"
 
 namespace rm_base
 {
@@ -42,8 +44,10 @@ public:
   void listen_loop();
 
 private:
-  void gimbal_cmd_cb(const rm_interfaces::msg::GimbalCmd::SharedPtr msg);
   void chassis_cmd_cb(const rm_interfaces::msg::ChassisCmd::SharedPtr msg);
+  void gimbal_cmd_cb(const rm_interfaces::msg::GimbalCmd::SharedPtr msg);
+  void shoot_cmd_cb(const rm_interfaces::msg::ShootCmd::SharedPtr msg);
+  void robot_interactive_data_cb(const rm_interfaces::msg::RobotInteractiveData::SharedPtr msg);
 
   bool checksum_send(rmoss_base::FixedPacket<64> & packet);
   bool verify_checksum(const rmoss_base::FixedPacket<64> & packet);
@@ -57,8 +61,11 @@ private:
   rmoss_base::FixedPacketTool<64>::SharedPtr packet_tool_;
 
   // ros
-  rclcpp::Subscription<rm_interfaces::msg::GimbalCmd>::SharedPtr gimbal_cmd_sub_;
   rclcpp::Subscription<rm_interfaces::msg::ChassisCmd>::SharedPtr chassis_cmd_sub_;
+  rclcpp::Subscription<rm_interfaces::msg::GimbalCmd>::SharedPtr gimbal_cmd_sub_;
+  rclcpp::Subscription<rm_interfaces::msg::ShootCmd>::SharedPtr shoot_cmd_sub_;
+  rclcpp::Subscription<rm_interfaces::msg::RobotInteractiveData>::SharedPtr
+    robot_interactive_data_sub_;
 };
 
 }  // namespace rm_base

@@ -21,6 +21,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 find_package(rmoss_base REQUIRED)
 find_package(rmoss_interfaces REQUIRED)
 find_package(rm_interfaces REQUIRED)
@@ -28,6 +30,8 @@ find_package(rm_interfaces REQUIRED)
 set(dependencies
   rclcpp
   rclcpp_components
+  sensor_msgs
+  tf2_ros
   rmoss_base
   rmoss_interfaces
   rm_interfaces
