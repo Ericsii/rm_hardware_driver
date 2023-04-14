@@ -70,13 +70,13 @@ public:
       joint_state_.name[2] = "wheel_left_front_joint";
       joint_state_.position[2] = data_.wheel_left_front_position;
       joint_state_.velocity[2] = data_.wheel_left_front_velocity;
-      joint_state_.name[3] = "wheel_left_rear_joint";
+      joint_state_.name[3] = "wheel_left_back_joint";
       joint_state_.position[3] = data_.wheel_left_rear_position;
       joint_state_.velocity[3] = data_.wheel_left_rear_velocity;
       joint_state_.name[4] = "wheel_right_front_joint";
       joint_state_.position[4] = data_.wheel_right_front_position;
       joint_state_.velocity[4] = data_.wheel_right_front_velocity;
-      joint_state_.name[5] = "wheel_right_rear_joint";
+      joint_state_.name[5] = "wheel_right_back_joint";
       joint_state_.position[5] = data_.wheel_right_rear_position;
       joint_state_.velocity[5] = data_.wheel_right_rear_velocity;
       pub_->publish(joint_state_);

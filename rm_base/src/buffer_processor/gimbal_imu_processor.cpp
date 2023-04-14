@@ -83,9 +83,9 @@ public:
       transform_stamped.transform.translation.x = 0.0;
       transform_stamped.transform.translation.y = 0.0;
       transform_stamped.transform.translation.z = 0.0;
-      transform_stamped.transform.rotation.x = data_.ori_x;
-      transform_stamped.transform.rotation.y = data_.ori_y;
-      transform_stamped.transform.rotation.z = data_.ori_z;
+      transform_stamped.transform.rotation.x = -data_.ori_x;
+      transform_stamped.transform.rotation.y = -data_.ori_y;
+      transform_stamped.transform.rotation.z = -data_.ori_z;
       transform_stamped.transform.rotation.w = data_.ori_w;
       pub_tf_->sendTransform(transform_stamped);
     }
