@@ -41,3 +41,6 @@ target_link_libraries(test_gimbal_imu_processor ${PROJECT_NAME})
 
 ament_add_gtest(test_joint_state_processor test_joint_state_processor.cpp)
 target_link_libraries(test_joint_state_processor ${PROJECT_NAME})
+
+ament_add_gtest(test_robot_command_processor test_robot_command_processor.cpp)
+target_link_libraries(test_robot_command_processor ${PROJECT_NAME})

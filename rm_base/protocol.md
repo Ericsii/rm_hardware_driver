@@ -110,6 +110,7 @@ typedef struct __packed
 | 0x12 | 裁判系统机器人间交互数据 (RecvID::REFREEINTERACT) |
 | 0x13 | 机器人关节状态 (RecvID::ROBOTJOINTSTATE) |
 | 0x14 | 云台IMU数据(RecvID::GIMBALIMU) |
+| 0x15 | 小地图下发信息(RevcID::ROBOTCOMMAND) |
 
 ### 数据段定义
 
@@ -318,4 +319,16 @@ typedef struct __packed
   float acc_y;
   float acc_z;
 } imu_t;
+```
+
+### 小地图下发信息 (RevcID::ROBOTCOMMAND)
+```cpp
+typedef struct __packed
+{
+  float target_position_x;
+  float target_position_y;
+  float target_position_z;
+  uint8_t commd_keyboard;
+  uint16_t target_robot_ID;
+} ext_robot_command_t;
 ```

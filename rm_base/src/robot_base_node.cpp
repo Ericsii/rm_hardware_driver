@@ -96,6 +96,7 @@ RobotBaseNode::RobotBaseNode(const rclcpp::NodeOptions & options)
   ProcessFactory::create(static_cast<uint8_t>(RecvID::REFEREEINTERACT), this);
   ProcessFactory::create(static_cast<uint8_t>(RecvID::ROBOTJOINTSTATE), this);
   ProcessFactory::create(static_cast<uint8_t>(RecvID::GIMBALIMU), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::ROBOTCOMMAND), this);
 
   RCLCPP_INFO(this->get_logger(), "Initialize subscriptions.");
   chassis_cmd_sub_ = this->create_subscription<rm_interfaces::msg::ChassisCmd>(

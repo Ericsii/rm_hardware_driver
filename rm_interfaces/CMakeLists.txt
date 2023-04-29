@@ -24,6 +24,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/referee/RobotHurt.msg"
   "msg/referee/RobotInteractiveData.msg"
   "msg/referee/RobotShootData.msg"
+  "msg/referee/RobotCommand.msg"
   "msg/ChassisCmd.msg"
   "msg/Gimbal.msg"
   "msg/GimbalCmd.msg"
