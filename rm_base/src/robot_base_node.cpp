@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,41 @@
 
 namespace rm_base
 {
+
+typedef struct
+{
+  uint8_t type;
+  float linear_x;
+  float linear_y;
+  float linear_z;
+  float angular_x;
+  float angular_y;
+  float angular_z;
+} __attribute__((__packed__)) chassis_cmd_t;
+
+typedef struct
+{
+  uint8_t yaw_type;
+  uint8_t pitch_type;
+  float position_yaw;
+  float position_pitch;
+  float velocity_yaw;
+  float velocity_pitch;
+} __attribute__((__packed__)) gimbal_cmd_t;
+
+typedef struct
+{
+  uint8_t type;
+  uint8_t projectile_num;
+} __attribute__((__packed__)) shoot_cmd_t;
+
+typedef struct
+{
+  uint16_t cmd_id;
+  uint16_t send_id;
+  uint16_t recv_id;
+  uint8_t data[54];
+} __attribute__((__packed__)) send_referee_interact_t;
 
 RobotBaseNode::RobotBaseNode(const rclcpp::NodeOptions & options)
 : Node("robot_base_node", options)
@@ -51,17 +86,26 @@ RobotBaseNode::RobotBaseNode(const rclcpp::NodeOptions & options)
   ProcessFactory::create(static_cast<uint8_t>(RecvID::GAMERESULT), this);
   ProcessFactory::create(static_cast<uint8_t>(RecvID::ROBOTHP), this);
   ProcessFactory::create(static_cast<uint8_t>(RecvID::EVENTDATA), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::ROBOTSTATUS), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::POWERHEATDATA), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::GAMEROBOTPOS), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::BUFFMUSK), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::ROBOTHURT), this);
   ProcessFactory::create(static_cast<uint8_t>(RecvID::SHOOTDATA), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::BULLETREMAINING), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::REFEREEINTERACT), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::ROBOTJOINTSTATE), this);
+  ProcessFactory::create(static_cast<uint8_t>(RecvID::GIMBALIMU), this);
 
   RCLCPP_INFO(this->get_logger(), "Initialize subscriptions.");
-  gimbal_cmd_sub_ = this->create_subscription<rm_interfaces::msg::GimbalCmd>(
-    gimbal_cmd_topic_name, 10,
-    std::bind(&RobotBaseNode::gimbal_cmd_cb, this, std::placeholders::_1));
   chassis_cmd_sub_ = this->create_subscription<rm_interfaces::msg::ChassisCmd>(
     chassis_cmd_topic_name, 10,
     std::bind(&RobotBaseNode::chassis_cmd_cb, this, std::placeholders::_1));
-  RCLCPP_INFO(this->get_logger(), "gimbal_cmd topic: %s", gimbal_cmd_sub_->get_topic_name());
+  gimbal_cmd_sub_ = this->create_subscription<rm_interfaces::msg::GimbalCmd>(
+    gimbal_cmd_topic_name, 10,
+    std::bind(&RobotBaseNode::gimbal_cmd_cb, this, std::placeholders::_1));
   RCLCPP_INFO(this->get_logger(), "chassis_cmd topic: %s", chassis_cmd_sub_->get_topic_name());
+  RCLCPP_INFO(this->get_logger(), "gimbal_cmd topic: %s", gimbal_cmd_sub_->get_topic_name());
 
   // task thread
   listen_thread_ = std::make_unique<std::thread>(&RobotBaseNode::listen_loop, this);
@@ -99,38 +143,67 @@ bool RobotBaseNode::checksum_send(rmoss_base::FixedPacket<64> & packet)
   return packet_tool_->send_packet(packet);
 }
 
+void RobotBaseNode::chassis_cmd_cb(const rm_interfaces::msg::ChassisCmd::SharedPtr msg)
+{
+  rmoss_base::FixedPacket<64> packet;
+  chassis_cmd_t data;
+  data.type = msg->type;
+  data.linear_x = msg->twist.linear.x;
+  data.linear_y = msg->twist.linear.y;
+  data.linear_z = msg->twist.linear.z;
+  data.angular_x = msg->twist.angular.x;
+  data.angular_y = msg->twist.angular.y;
+  data.angular_z = msg->twist.angular.z;
+  packet.load_data(SendID::CHASSISCMD, 1);
+  packet.load_data(data, 2);
+  if (!this->checksum_send(packet)) {
+    RCLCPP_WARN(this->get_logger(), "Send ChassisCmd failed.");
+  }
+}
+
 void RobotBaseNode::gimbal_cmd_cb(const rm_interfaces::msg::GimbalCmd::SharedPtr msg)
 {
-  // | 0x01 | tid 1byte | yaw_type 1byte | pitch_type 1byte | position.yaw 4byte | position.pitch 4byte | velocity.yaw
-  // 4byte | velocity.pitch 4byte | 4byte | velocity.pitch 4byte |
   rmoss_base::FixedPacket<64> packet;
+  gimbal_cmd_t data;
+  data.yaw_type = msg->yaw_type;
+  data.pitch_type = msg->pitch_type;
+  data.position_yaw = msg->position.yaw;
+  data.position_pitch = msg->position.pitch;
+  data.velocity_yaw = msg->velocity.yaw;
+  data.velocity_pitch = msg->velocity.pitch;
   packet.load_data(SendID::GIMBALCMD, 1);
-  packet.load_data(msg->yaw_type, 2);
-  packet.load_data(msg->pitch_type, 3);
-  packet.load_data(msg->position.yaw, 4);
-  packet.load_data(msg->position.pitch, 8);
-  packet.load_data(msg->velocity.yaw, 12);
-  packet.load_data(msg->velocity.pitch, 16);
+  packet.load_data(data, 2);
   if (!this->checksum_send(packet)) {
     RCLCPP_WARN(this->get_logger(), "Send GimbalCmd failed.");
   }
 }
 
-void RobotBaseNode::chassis_cmd_cb(const rm_interfaces::msg::ChassisCmd::SharedPtr msg)
+void RobotBaseNode::shoot_cmd_cb(const rm_interfaces::msg::ShootCmd::SharedPtr msg)
 {
-  // | 0x02 | tid 1byte | type 1byte | twist.linear.x 4byte | twist.linear.y 4byte | accel.linear.x 4byte |
-  // accel.linear.y 4byte | accel.anglular 4byte |
   rmoss_base::FixedPacket<64> packet;
-  packet.load_data(SendID::CHASSISCMD, 1);
-  packet.load_data(msg->type, 2);
-  packet.load_data(static_cast<float>(msg->twist.linear.x), 3);
-  packet.load_data(static_cast<float>(msg->twist.linear.y), 7);
-  packet.load_data(static_cast<float>(msg->twist.linear.z), 11);
-  packet.load_data(static_cast<float>(msg->twist.angular.x), 15);
-  packet.load_data(static_cast<float>(msg->twist.angular.y), 19);
-  packet.load_data(static_cast<float>(msg->twist.angular.z), 23);
+  shoot_cmd_t data;
+  data.type = msg->type;
+  data.projectile_num = msg->projectile_num;
+  packet.load_data(SendID::SHOOTCMD, 1);
+  packet.load_data(data, 2);
   if (!this->checksum_send(packet)) {
-    RCLCPP_WARN(this->get_logger(), "Send ChassisCmd failed.");
+    RCLCPP_WARN(this->get_logger(), "Send ShootCmd failed.");
+  }
+}
+
+void RobotBaseNode::robot_interactive_data_cb(
+  const rm_interfaces::msg::RobotInteractiveData::SharedPtr msg)
+{
+  rmoss_base::FixedPacket<64> packet;
+  send_referee_interact_t data;
+  data.cmd_id = msg->data_id;
+  data.send_id = msg->sender_id;
+  data.recv_id = msg->receiver_id;
+  std::copy(msg->data.begin(), msg->data.end(), data.data);
+  packet.load_data(SendID::REFREEINTERACT, 1);
+  packet.load_data(data, 2);
+  if (!this->checksum_send(packet)) {
+    RCLCPP_WARN(this->get_logger(), "Send RobotInteractiveData failed.");
   }
 }
 

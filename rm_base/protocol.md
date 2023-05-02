@@ -30,8 +30,8 @@ PS： 对CMD_ID的定义在文件`include/rm_base/protocol_types.hpp`中
 **注意每个结构体都需要以1字节对齐**
 
 1字节对齐方式
-- 在GCC中加入 __attribute__((__packed__))编译指令
-- 在STM32中加上 __packed 关键字
+- 在GCC中加入 `__attribute__((__packed__))` 编译指令
+- 在STM32中加上 `__packed` 关键字
 
 若标有**步兵机器人必须**意味着此为自瞄程序所必须实现的通讯协议，其余未特殊说明为哨兵机器人所必须实现的协议。
 
