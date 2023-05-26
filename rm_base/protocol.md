@@ -105,11 +105,11 @@ typedef struct __packed
 | 0x07 | 机器人位置 (RecvID::GAMEROBOTPOS) |
 | 0x08 | 机器人增益 (RecvID::BUFFMUSK) |
 | 0x09 | 伤害状态 (RecvID::ROBOTHURT) |
-| 0x10 | 实时射击信息 (RecvID::SHOOTDATA) |
-| 0x11 | 子弹剩余发射数 (RecvID::BULLETREMAINING) |
-| 0x12 | 裁判系统机器人间交互数据 (RecvID::REFREEINTERACT) |
-| 0x13 | 机器人关节状态 (RecvID::ROBOTJOINTSTATE) |
-| 0x14 | 云台IMU数据(RecvID::GIMBALIMU) |
+| 0x0A | 实时射击信息 (RecvID::SHOOTDATA) |
+| 0x0B | 子弹剩余发射数 (RecvID::BULLETREMAINING) |
+| 0x0C | 裁判系统机器人间交互数据 (RecvID::REFREEINTERACT) |
+| 0x0D | 机器人关节状态 (RecvID::ROBOTJOINTSTATE) |
+| 0x0F | 云台IMU数据(RecvID::GIMBALIMU) |
 
 ### 数据段定义
 
