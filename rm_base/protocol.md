@@ -109,7 +109,7 @@ typedef struct __packed
 | 0x0B | 子弹剩余发射数 (RecvID::BULLETREMAINING) |
 | 0x0C | 裁判系统机器人间交互数据 (RecvID::REFREEINTERACT) |
 | 0x0D | 机器人关节状态 (RecvID::ROBOTJOINTSTATE) |
-| 0x0F | 云台IMU数据(RecvID::GIMBALIMU) |
+| 0x0E | 云台IMU数据(RecvID::GIMBALIMU) |
 
 ### 数据段定义
 

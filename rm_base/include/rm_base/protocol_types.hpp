@@ -35,7 +35,7 @@ enum class RecvID : uint8_t
   BULLETREMAINING = 0x0B,
   REFEREEINTERACT = 0x0C,
   ROBOTJOINTSTATE = 0x0D,
-  GIMBALIMU = 0x0F
+  GIMBALIMU = 0x0E
 };
 
 enum class SendID : uint8_t
