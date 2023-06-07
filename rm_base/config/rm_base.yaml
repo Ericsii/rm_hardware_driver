@@ -3,6 +3,7 @@
     port: "/dev/ttyUSB0"
     baud_rate: 115200
     enable_realtime_send: true # Enable async send
+    time_offset: 0.006
 
     gimbal_cmd_topic: "gimbal_cmd"
     chassis_cmd_topic_name: "chassis_cmd"

@@ -49,12 +49,17 @@ public:
     joint_state_.name.resize(6);
     joint_state_.position.resize(6);
     joint_state_.velocity.resize(6);
+
+    if (!node_->has_parameter("time_offset")) {
+      node_->declare_parameter("time_offset", 0.0);
+    }
   }
 
   bool process_packet(const Packet & packet)
   {
+    time_offset_ = node_->get_parameter("time_offset").as_double();
     if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
-      joint_state_.header.stamp = node_->now();
+      joint_state_.header.stamp = node_->now() + rclcpp::Duration::from_seconds(time_offset_);
 
       auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
       if (!packet_recv.unload_data(data_, 2)) {
@@ -90,6 +95,8 @@ public:
 private:
   robot_joint_state_t data_;
   sensor_msgs::msg::JointState joint_state_;
+
+  double time_offset_;
 
   rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr pub_;
 };

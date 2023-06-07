@@ -51,12 +51,17 @@ public:
         rclcpp::KeepLast(
           1)));
     pub_tf_ = std::make_shared<tf2_ros::TransformBroadcaster>(node_);
+
+    if (!node_->has_parameter("time_offset")) {
+      node_->declare_parameter("time_offset", 0.0);
+    }
   }
 
   bool process_packet(const Packet & packet)
   {
+    time_offset_ = node_->get_parameter("time_offset").as_double();
     if (std::holds_alternative<rmoss_base::FixedPacket64>(packet)) {
-      auto timestamp = node_->now();
+      auto timestamp = node_->now() + rclcpp::Duration::from_seconds(time_offset_);
       auto packet_recv = std::get<rmoss_base::FixedPacket64>(packet);
       if (!packet_recv.unload_data(data_, 2)) {
         RCLCPP_WARN(node_->get_logger(), "Unload data failed for GimbalIMU processor.");
@@ -97,6 +102,7 @@ private:
   sensor_msgs::msg::Imu imu_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr pub_;
   std::shared_ptr<tf2_ros::TransformBroadcaster> pub_tf_;
+  double time_offset_;
 };
 
 #include <rm_base/register_macro.hpp>
